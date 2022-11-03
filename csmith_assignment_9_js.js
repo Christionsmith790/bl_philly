@@ -4,11 +4,6 @@ var map = L.map("map", { center: [39.981192, -75.155399], zoom: 10 });
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
   attribution: "© OpenStreetMap",
 }).addTo(map);
-map.doubleClickZoom.disable();
-
-L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-  attribution: "© OpenStreetMap",
-}).addTo(map);
 
 var mbAttr =
     'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
@@ -56,13 +51,14 @@ $.getJSON(
       style: styleFunc,
       onEachFeature: onEachFeature,
     }).addTo(map);
+    var overlayLayer = {
+      blood_lead_level: neighborhoodsLayer,
+      "Phily University": universities,
+    };
+
+    L.control.layers(baseMaps, overlayLayer).addTo(map);
   }
 );
-
-var overlayLayer = {
-  blood_lead_level: neighborhoodsLayer,
-  "Phily University": universities,
-};
 
 // Set style function that sets fill color property equal to blood lead
 function styleFunc(feature) {
@@ -148,9 +144,3 @@ legend.onAdd = function (map) {
 
 // Add Legend to Map
 legend.addTo(map);
-
-// Add Scale Bar to Map
-L.control.scale({ position: "bottomleft" }).addTo(map);
-
-// Add Layers
-L.control.layers(baseMaps, overlayLayer).addTo(map);
